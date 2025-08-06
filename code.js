@@ -64,14 +64,12 @@ updateGameBoard = setInterval(() => {
     contex.drawImage(obj.img, obj.xObjectPos, obj.yObjectPos, obj.sizeObject, obj.sizeObject);
     collisionCheck(xAirplanePos, yAirplanePos, obj.xObjectPos, obj.yObjectPos);
   }
-},SPEED_MS * 2);
+}, SPEED_MS * 2);
 
 function collisionCheck(planeX, planeY, objectX, objectY) {
   if (planeX < objectX + SIZE_IMAGE && planeX + SIZE_IMAGE > objectX &&
     planeY < objectY + SIZE_IMAGE && planeY + SIZE_IMAGE > objectY) {
     let secondsString = seconds.toString();
-    contex.clearRect(0, 0, gameBoard.height, gameBoard.width);
-    activeObject.length = 0;
     clearInterval(updateObject);
     clearInterval(updateGameBoard);
     clearInterval(airplaneSpeed);
