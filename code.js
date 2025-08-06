@@ -6,9 +6,9 @@ const LEFT_ARROW = 37;
 const REIGHT_ARROW = 39;
 const  gameBoard= document.getElementById("playArea"); 
 const  contex = gameBoard.getContext("2d");
-const object = [];
-const imageSource = ["Images/airplane2.png", "Images/ball.png", "Images/parachute jumper1.png", "Images/parachute jumper2.png", "Images/stork.png"];
-const images = [new Image(), new Image(), new Image(), new Image(), new Image()];
+const objectSource = ["Images/airplane2.png", "Images/ball.png", "Images/parachute jumper1.png", "Images/parachute jumper2.png", "Images/stork.png"];
+const baseObject = [new Image(), new Image(), new Image(), new Image(), new Image()];
+const activeObject = [];
 const airplaneImage = new Image();
 let xAirplanePos = gameBoard.width / 2;
 let yAirplanePos = gameBoard.height - SIZE_IMAGE;
@@ -24,27 +24,27 @@ airplaneImage.src = "Images/airplane1.png";
 setInterval(function(){++seconds},ONE_SECOND_MS); 
 
 for (let i = 0; i < 5; ++i) {
-  images[i].src = imageSource[i];
+  baseObject[i].src = objectSource[i];
 }
+pushActiveObject();
 
-function pushObject() {
+function pushActiveObject() {
   const imageIndex = Math.floor(Math.random() * 5);
-  object.push({
+  activeObject.push({
     xObjectPos: Math.random() * (gameBoard.width- SIZE_IMAGE),
     yObjectPos: 0,
     sizeObject: SIZE_IMAGE,
     speed: speedObject,
-    img: images[imageIndex],
+    img: baseObject[imageIndex],
   })
 }
-pushObject();
 
 updateObject = setInterval(() => {
-  for (let i = 0; i < object.length; ++i) {
-    object[i].yObjectPos += object[i].speed;
+  for (let i = 0; i < activeObject.length; ++i) {
+    activeObject[i].yObjectPos += activeObject[i].speed;
   }
-  if (object[object.length - 1].yObjectPos > SIZE_IMAGE) {
-    pushObject();
+  if (activeObject[activeObject.length - 1].yObjectPos > SIZE_IMAGE) {
+    pushActiveObject();
   }
 }, SPEED_MS)
 
@@ -60,7 +60,7 @@ airplaneSpeed = setInterval( () => {
 updateGameBoard = setInterval(() => {
   contex.clearRect(0, 0, gameBoard.width, gameBoard.height);
   contex.drawImage(airplaneImage, xAirplanePos, yAirplanePos, SIZE_IMAGE, SIZE_IMAGE);
-  for (let obj of object) {
+  for (let obj of activeObject) {
     contex.drawImage(obj.img, obj.xObjectPos, obj.yObjectPos, obj.sizeObject, obj.sizeObject);
     collisionCheck(xAirplanePos, yAirplanePos, obj.xObjectPos, obj.yObjectPos);
   }
@@ -71,7 +71,7 @@ function collisionCheck(planeX, planeY, objectX, objectY) {
     planeY < objectY + SIZE_IMAGE && planeY + SIZE_IMAGE > objectY) {
     let secondsString = seconds.toString();
     contex.clearRect(0, 0, gameBoard.height, gameBoard.width);
-    object.length = 0;
+    activeObject.length = 0;
     clearInterval(updateObject);
     clearInterval(updateGameBoard);
     clearInterval(airplaneSpeed);
