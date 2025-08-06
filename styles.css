@@ -2,6 +2,7 @@ canvas {
     background-color:#77b5fe;
 }
 button {
-    display: block;
+    width: 120px;
+    height: 30px;
 }
 
