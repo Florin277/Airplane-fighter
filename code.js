@@ -21,7 +21,7 @@ let speedGame = 15;
 let seconds = 0;
 airplaneImage.src = "Images/airplane1.png";
 
-setInterval(function(){++seconds},ONE_SECOND_MS); 
+setInterval(function() {++seconds}, ONE_SECOND_MS); 
 
 for (let i = 0; i < 5; ++i) {
   baseObject[i].src = objectSource[i];
