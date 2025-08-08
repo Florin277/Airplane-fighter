@@ -4,5 +4,6 @@ canvas {
 button {
     width: 120px;
     height: 30px;
+    position: relative;
 }
 
