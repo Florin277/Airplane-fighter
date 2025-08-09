@@ -1,9 +1,12 @@
 canvas {
     background-color:#77b5fe;
 }
-button {
-    width: 120px;
+#score {
+    width: 100px;
     height: 30px;
-    position: relative;
+}
+#reset {
+    width: 100px;
+    height: 30px;
 }
 
