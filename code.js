@@ -25,18 +25,17 @@ function startGame() {
   let airplaneSpeed;
   projectilImage.src = "Images/projectil.png";
   airplaneImage.src = "Images/airplane1.png";
-  let speedAirplane = 10;
+  let speedAirplane = 100;
   let speedObject = 3;
   let speedProjectil = 10;
   let objectsRemoved = 0;
   document.getElementById('score').innerHTML = "Player score";
-  
   for (let i = 0; i < 5; ++i) {
     fallingObjects[i].src = imagePaths[i];
   }
   
   function pushActiveObject() {
-    let imageIndex = Math.floor(Math.random() * 5);
+    const imageIndex = Math.floor(Math.random() * 5);
     activeObject.push({
       xObjectPos: Math.random() * (gameBoard.width- SIZE_IMAGE),
       yObjectPos: -SIZE_IMAGE,
@@ -62,12 +61,10 @@ function startGame() {
     }
     if (activeObject.length === 0 || activeObject[activeObject.length - 1].yObjectPos > SIZE_IMAGE / 2)  {
       pushActiveObject();
-
     }
     if (objectsRemoved % 3 === 0 && objectsRemoved) {
       speedObject += 0.001;
     }
-
   }, SPEED_MS)
 
   updateProjectile = setInterval(() => {
@@ -83,7 +80,7 @@ function startGame() {
       let y = Math.random() * contex.canvas.height;
       contex.fillRect(x, y, 1, 5);
     }
-  }, SPEED_MS)
+  }, SPEED_MS * 3)
   
   updateGameBoard = setInterval(() => {
     contex.clearRect(0, 0, gameBoard.width, gameBoard.height);
@@ -93,8 +90,7 @@ function startGame() {
       let colision = 0;
       for (let i = 0; i < projectileLaunch.length; ++i) {
         contex.drawImage(projectileLaunch[i].image, projectileLaunch[i].xProjectilPos, projectileLaunch[i].yProjectilPos, projectileLaunch[i].sizeProjectil, projectileLaunch[i].sizeProjectil);
-        if (projectilCollisionCheck(activeObject[j].xObjectPos, activeObject[j].yObjectPos, projectileLaunch[i].xProjectilPos, projectileLaunch[i].yProjectilPos) ||
-          projectileLaunch[i].yProjectilPos < 0) {
+        if (projectilCollisionCheck(activeObject[j].xObjectPos, activeObject[j].yObjectPos, projectileLaunch[i].xProjectilPos, projectileLaunch[i].yProjectilPos)) {
           ++objectsRemoved;
           projectileLaunch.splice(i, 1);
           i = projectileLaunch.length;
@@ -102,12 +98,11 @@ function startGame() {
         }
       }
       airplaneCollisionCheck(xAirplanePos, yAirplanePos, activeObject[j].xObjectPos, activeObject[j].yObjectPos);
-      if (colision > 0 && activeObject.length > 0) {
+      if (colision) {
          activeObject.splice(j, 1);
       }
-      colision = 0;
     }
-  }, SPEED_MS * 2);
+  }, SPEED_MS);
   
   function airplaneCollisionCheck(planeX, planeY, objectX, objectY) {
     if (planeX < objectX + SIZE_IMAGE && planeX + SIZE_IMAGE > objectX &&
@@ -129,7 +124,7 @@ function startGame() {
     return 0;
   }
   
-  function moveAirplane(pressArrow) {
+  function moveAirplaneAndLaunch(pressArrow) {
     if (pressArrow.keyCode === LEFT_ARROW && xAirplanePos > 0) {
       xAirplanePos -= MOVE_AIRPLANE;
     } else if (pressArrow.keyCode === REIGHT_ARROW && 
@@ -141,6 +136,6 @@ function startGame() {
     }
   }
 
-  document.onkeydown = moveAirplane;
+  document.onkeydown = moveAirplaneAndLaunch;
 }
 document.getElementById('reset').addEventListener("click", startGame);
