@@ -90,21 +90,23 @@ function startGame() {
       let colision = 0;
       for (let i = 0; i < projectileLaunch.length; ++i) {
         contex.drawImage(projectileLaunch[i].image, projectileLaunch[i].xProjectilPos, projectileLaunch[i].yProjectilPos, projectileLaunch[i].sizeProjectil, projectileLaunch[i].sizeProjectil);
-        if (projectilCollisionCheck(activeObject[j].xObjectPos, activeObject[j].yObjectPos, projectileLaunch[i].xProjectilPos, projectileLaunch[i].yProjectilPos)) {
+        if (checkCollision(xAirplanePos, yAirplanePos, activeObject[j].xObjectPos, activeObject[j].yObjectPos, projectileLaunch[i].xProjectilPos, projectileLaunch[i].yProjectilPos)) {
           ++objectsRemoved;
           projectileLaunch.splice(i, 1);
           i = projectileLaunch.length;
           colision = 1;
         }
       }
-      airplaneCollisionCheck(xAirplanePos, yAirplanePos, activeObject[j].xObjectPos, activeObject[j].yObjectPos);
       if (colision) {
          activeObject.splice(j, 1);
+      }
+      if (projectileLaunch.length === 0) {
+        checkCollision(xAirplanePos, yAirplanePos, activeObject[j].xObjectPos, activeObject[j].yObjectPos, 0, 0)
       }
     }
   }, SPEED_MS);
   
-  function airplaneCollisionCheck(planeX, planeY, objectX, objectY) {
+  function checkCollision(planeX, planeY, objectX, objectY, projectilX, projectilY) {
     if (planeX < objectX + SIZE_IMAGE && planeX + SIZE_IMAGE > objectX &&
       planeY < objectY + SIZE_IMAGE && planeY + SIZE_IMAGE > objectY) {
       let playerScore = objectsRemoved.toString();
@@ -114,16 +116,14 @@ function startGame() {
       clearInterval(updateProjectile);
       document.getElementById('score').innerHTML =  playerScore;
     }
-  }
-  
-  function projectilCollisionCheck(xObject, yObject, projectilX, projectilY) {
-    if (xObject < projectilX + SIZE_PROECTIL && xObject + SIZE_IMAGE > projectilX &&
-       yObject + SIZE_IMAGE > projectilY) {
+    if (objectX < projectilX + SIZE_PROECTIL && objectX + SIZE_IMAGE > projectilX &&
+       objectY + SIZE_IMAGE > projectilY) {
       return 1;
-    }
+    } 
     return 0;
   }
   
+
   function moveAirplaneAndLaunch(pressArrow) {
     if (pressArrow.keyCode === LEFT_ARROW && xAirplanePos > 0) {
       xAirplanePos -= MOVE_AIRPLANE;
