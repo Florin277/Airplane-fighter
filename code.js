@@ -117,13 +117,12 @@ function startGame() {
       document.getElementById('score').innerHTML =  playerScore;
     }
     if (objectX < projectilX + SIZE_PROECTIL && objectX + SIZE_IMAGE > projectilX &&
-       objectY + SIZE_IMAGE > projectilY) {
+      objectY + SIZE_IMAGE > projectilY) {
       return 1;
     } 
     return 0;
   }
   
-
   function moveAirplaneAndLaunch(pressArrow) {
     if (pressArrow.keyCode === LEFT_ARROW && xAirplanePos > 0) {
       xAirplanePos -= MOVE_AIRPLANE;
